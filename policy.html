@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — AITL India</title>
+  <meta name="description" content="Privacy policy for an app published by AITL India (aitlindia)." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="site">
+      <div class="brand"><a href="index.html">AITL India</a></div>
+      <div class="tagline">Privacy policies for our Android &amp; iOS apps</div>
+    </header>
+
+    <main id="content">
+      <noscript>
+        <p>This page requires JavaScript to display the privacy policy.
+        Please enable JavaScript, or contact us for a copy of the policy.</p>
+      </noscript>
+    </main>
+
+    <footer class="site">
+      <p>&copy; <span id="year"></span> AITL India.
+        <a href="index.html">All app policies</a></p>
+    </footer>
+  </div>
+
+  <script src="apps.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // ---- helpers ---------------------------------------------------------
+    function el(tag, text, className) {
+      const node = document.createElement(tag);
+      if (text) node.textContent = text;
+      if (className) node.className = className;
+      return node;
+    }
+
+    function section(title, htmlBody) {
+      const frag = document.createDocumentFragment();
+      frag.appendChild(el("h2", title));
+      const body = document.createElement("div");
+      body.innerHTML = htmlBody;
+      frag.appendChild(body);
+      return frag;
+    }
+
+    function formatDate(iso) {
+      const d = new Date(iso + "T00:00:00");
+      if (isNaN(d)) return iso;
+      return d.toLocaleDateString("en-US", {
+        year: "numeric", month: "long", day: "numeric",
+      });
+    }
+
+    function platformPhrase(platforms) {
+      const names = { android: "Android", ios: "iOS" };
+      const mapped = platforms.map((p) => names[p] || p);
+      return mapped.join(" and ");
+    }
+
+    // ---- third-party service disclosures ---------------------------------
+    const SERVICE_INFO = {
+      admob: {
+        name: "Google AdMob",
+        description:
+          "AdMob is an advertising service provided by Google. It may use device identifiers (such as the advertising ID) and usage data to serve and measure advertisements.",
+        link: "https://support.google.com/admob/answer/6128543",
+      },
+      firebaseAnalytics: {
+        name: "Google Analytics for Firebase",
+        description:
+          "An analytics service provided by Google that helps us understand how the app is used (for example, which screens are viewed and how often). Data is collected in aggregate and does not directly identify you.",
+        link: "https://firebase.google.com/support/privacy",
+      },
+      crashlytics: {
+        name: "Firebase Crashlytics",
+        description:
+          "A crash-reporting service provided by Google. If the app crashes, technical information about the crash (device model, operating system version, and app state at the time of the crash) is collected so we can diagnose and fix the problem.",
+        link: "https://firebase.google.com/support/privacy",
+      },
+      googlePlayServices: {
+        name: "Google Play Services",
+        description:
+          "Core services provided by Google on Android devices that the app relies on to function.",
+        link: "https://policies.google.com/privacy",
+      },
+      appleAppServices: {
+        name: "Apple App Services",
+        description:
+          "Core services provided by Apple on iOS devices (such as the App Store and iCloud, where applicable) that the app relies on to function.",
+        link: "https://www.apple.com/legal/privacy/",
+      },
+    };
+
+    // ---- render ----------------------------------------------------------
+    (function renderPolicy() {
+    const content = document.getElementById("content");
+    const slug = new URLSearchParams(location.search).get("app");
+    const app = APPS.find((a) => a.slug === slug);
+
+    if (!app) {
+      document.title = "Policy Not Found — " + DEVELOPER.name;
+      const box = el("div", null, "error-box");
+      box.appendChild(el("h1", "Privacy policy not found"));
+      const p = el("p",
+        "We couldn't find a privacy policy for the requested app. " +
+        "Please choose an app from the list of all our app policies.");
+      box.appendChild(p);
+      const back = el("p");
+      const link = el("a", "View all app policies");
+      link.href = "index.html";
+      back.appendChild(link);
+      box.appendChild(back);
+      content.appendChild(box);
+    } else {
+      document.title = app.name + " — Privacy Policy — " + DEVELOPER.name;
+      const platforms = platformPhrase(app.platforms);
+      const email =
+        '<a href="mailto:' + app.contactEmail + '">' + app.contactEmail + "</a>";
+
+      content.appendChild(el("h1", "Privacy Policy — " + app.name));
+      content.appendChild(
+        el("p",
+          "Effective date: " + formatDate(app.effectiveDate) +
+          "  ·  Platforms: " + platforms +
+          (app.packageName ? "  ·  " + app.packageName : ""),
+          "meta"));
+
+      content.appendChild(section("Introduction",
+        "<p><strong>" + DEVELOPER.name + "</strong> (“we”, “us”, or “our”) built " +
+        "<strong>" + app.name + "</strong> as an app for " + platforms + ". " +
+        "This page informs you of our policies regarding the collection, use, and " +
+        "disclosure of information when you use " + app.name + " (the “Service”).</p>" +
+        (app.zeroData
+          ? "<p>The short version: <strong>this app collects nothing at all.</strong> " +
+            "The sections below explain that in full.</p>"
+          : "<p>By using the Service, you agree to the collection and use of information " +
+            "in accordance with this policy.</p>")));
+
+      if (app.zeroData) {
+        // Strict zero-collection policy: no internet permission, no SDKs.
+        content.appendChild(section("Information We Collect",
+          "<p><strong>None. " + app.name + " does not collect, store, share, or " +
+          "transmit any data whatsoever.</strong></p>" +
+          "<p>The app requests <strong>zero permissions</strong> and does not have " +
+          "the internet permission, so it is technically incapable of sending any " +
+          "information off your device. It contains no advertising, no analytics, " +
+          "no crash reporting, and no third-party code of any kind.</p>" +
+          "<ul>" +
+          "<li>No personal information is collected.</li>" +
+          "<li>No device identifiers are read or transmitted.</li>" +
+          "<li>No usage data or diagnostics are gathered.</li>" +
+          "<li>No data is shared with us or with anyone else.</li>" +
+          "</ul>"));
+
+        content.appendChild(section("Third-Party Services",
+          "<p>The app contains no third-party SDKs, libraries, or services that " +
+          "collect data. There are no ads, no analytics, and no tracking of any kind.</p>"));
+
+        (app.extraSections || []).forEach((s) => {
+          content.appendChild(section(s.title, s.html));
+        });
+
+        content.appendChild(section("Children’s Privacy",
+          "<p>Because the app collects no data from anyone, it also collects no " +
+          "data from children.</p>"));
+
+        content.appendChild(section("Changes to This Privacy Policy",
+          "<p>We may update this Privacy Policy from time to time — for example, if " +
+          "a future version of the app changes what it does. Updates are effective " +
+          "when posted on this page, and the effective date above will be revised " +
+          "accordingly. If the app ever begins collecting any data, this policy will " +
+          "say so explicitly before that version is released.</p>"));
+
+        content.appendChild(section("Contact Us",
+          "<p>If you have any questions about this Privacy Policy, contact us at " +
+          email + ".</p>"));
+        return;
+      }
+
+      let collectHtml;
+      if (app.collectsPersonalData) {
+        collectHtml =
+          "<p>For a better experience while using the Service, we may ask you to " +
+          "provide certain personally identifiable information, such as your name " +
+          "or email address. The information we request is used only to provide and " +
+          "improve the Service, is retained only as long as needed for that purpose, " +
+          "and will not be sold to anyone.</p>";
+      } else {
+        collectHtml =
+          "<p><strong>We do not ask you for, collect, or store any personally " +
+          "identifiable information directly.</strong> You can use " + app.name +
+          " without creating an account or providing personal details.</p>";
+      }
+      collectHtml +=
+        "<p>The app does use third-party services listed below that may collect " +
+        "limited information used to identify your device (such as an advertising " +
+        "identifier) for the purposes described in their own privacy policies.</p>";
+      content.appendChild(section("Information We Collect", collectHtml));
+
+      const services = (app.services || []).map((k) => SERVICE_INFO[k]).filter(Boolean);
+      if (services.length) {
+        let svcHtml =
+          "<p>The Service uses the following third-party services, each of which " +
+          "has its own privacy policy governing the data it collects:</p><ul>";
+        services.forEach((s) => {
+          svcHtml +=
+            "<li><strong>" + s.name + "</strong> — " + s.description +
+            ' See the <a href="' + s.link + '" rel="noopener noreferrer" target="_blank">' +
+            s.name + " privacy policy</a>.</li>";
+        });
+        svcHtml += "</ul>";
+        content.appendChild(section("Third-Party Services", svcHtml));
+      }
+
+      content.appendChild(section("Log Data",
+        "<p>Whenever an error occurs in the app, we may collect (through third-party " +
+        "products) data and information on your device called Log Data. This Log Data " +
+        "may include your device's Internet Protocol (“IP”) address, device name, " +
+        "operating system version, the app configuration at the time of the error, the " +
+        "time and date of your use of the Service, and other statistics. This data is " +
+        "used solely to diagnose problems and improve the Service.</p>"));
+
+      content.appendChild(section("Cookies and Identifiers",
+        "<p>The Service does not use browser cookies directly. However, the app may use " +
+        "third-party code and libraries (listed above) that use device identifiers or " +
+        "similar technologies to collect information and improve their services. On most " +
+        "devices you can reset your advertising identifier or limit ad tracking in your " +
+        "device settings.</p>"));
+
+      content.appendChild(section("Security",
+        "<p>We value your trust, and we strive to use commercially acceptable means of " +
+        "protecting any information processed by the Service. Remember, however, that no " +
+        "method of transmission over the internet or method of electronic storage is 100% " +
+        "secure, so we cannot guarantee absolute security.</p>"));
+
+      content.appendChild(section("Links to Other Sites",
+        "<p>The Service may contain links to other sites. If you click on a third-party " +
+        "link, you will be directed to that site. These external sites are not operated by " +
+        "us, so we strongly advise you to review their privacy policies. We have no control " +
+        "over and assume no responsibility for the content, privacy policies, or practices " +
+        "of any third-party sites or services.</p>"));
+
+      content.appendChild(section("Children’s Privacy",
+        "<p>The Service is not directed to children under the age of 13, and we do not " +
+        "knowingly collect personally identifiable information from children under 13. If " +
+        "we discover that a child under 13 has provided us with personal information, we " +
+        "will delete it immediately. If you are a parent or guardian and you are aware that " +
+        "your child has provided us with personal information, please contact us at " +
+        email + " so that we can take the necessary action.</p>"));
+
+      content.appendChild(section("Data Retention and Deletion",
+        "<p>We retain data only for as long as necessary for the purposes described in " +
+        "this policy. If you would like any information associated with your use of the " +
+        "app to be reviewed or deleted, contact us at " + email + " and we will respond " +
+        "as promptly as we can. You can also stop all collection of information by the " +
+        "app by uninstalling it.</p>"));
+
+      (app.extraSections || []).forEach((s) => {
+        content.appendChild(section(s.title, s.html));
+      });
+
+      content.appendChild(section("Changes to This Privacy Policy",
+        "<p>We may update this Privacy Policy from time to time. You are advised to review " +
+        "this page periodically for any changes; updates are effective when posted on this " +
+        "page, and the effective date above will be revised accordingly.</p>"));
+
+      content.appendChild(section("Contact Us",
+        "<p>If you have any questions or suggestions about this Privacy Policy, contact us " +
+        "at " + email + ".</p>"));
+    }
+    })();
+  </script>
+</body>
+</html>

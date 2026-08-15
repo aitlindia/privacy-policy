@@ -1,0 +1,36 @@
+# --- macOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# --- Editors / IDEs ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Node (if tooling is ever added) ---
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# --- Python (local preview server artifacts) ---
+__pycache__/
+*.py[cod]
+.venv/
+
+# --- Logs & temp files ---
+*.log
+*.tmp
+*.bak
+*.orig
+
+# --- Local scratch / drafts (never publish) ---
+scratch/
+drafts/
+private/

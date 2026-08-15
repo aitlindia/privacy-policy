@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policies — AITL India</title>
+  <meta name="description" content="Privacy policies for Android and iOS apps published by AITL India (aitlindia)." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="site">
+      <div class="brand"><a href="index.html">AITL India</a></div>
+      <div class="tagline">Privacy policies for our Android &amp; iOS apps</div>
+    </header>
+
+    <main>
+      <h1>Our App Privacy Policies</h1>
+      <p class="meta">
+        Select an app below to read its privacy policy. All apps are published
+        by <strong>AITL India</strong> (developer account: <em>aitlindia</em>).
+      </p>
+      <ul class="app-list" id="app-list"></ul>
+    </main>
+
+    <footer class="site">
+      <p>&copy; <span id="year"></span> AITL India. For questions, contact
+        <a id="contact-link" href="#"></a>.</p>
+    </footer>
+  </div>
+
+  <script src="apps.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const contactLink = document.getElementById("contact-link");
+    contactLink.textContent = DEVELOPER.contactEmail;
+    contactLink.href = "mailto:" + DEVELOPER.contactEmail;
+
+    const list = document.getElementById("app-list");
+    const platformLabel = { android: "Android", ios: "iOS" };
+
+    APPS.forEach((app) => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.className = "app-card";
+      a.href = "policy.html?app=" + encodeURIComponent(app.slug);
+
+      const left = document.createElement("span");
+      const name = document.createElement("span");
+      name.className = "app-name";
+      name.textContent = app.name + " ";
+      left.appendChild(name);
+      app.platforms.forEach((p) => {
+        const b = document.createElement("span");
+        b.className = "badge";
+        b.textContent = platformLabel[p] || p;
+        left.appendChild(b);
+      });
+
+      const arrow = document.createElement("span");
+      arrow.className = "arrow";
+      arrow.textContent = "→";
+
+      a.appendChild(left);
+      a.appendChild(arrow);
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+  </script>
+</body>
+</html>

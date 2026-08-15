@@ -30,6 +30,9 @@ __pycache__/
 *.bak
 *.orig
 
+# --- Internal docs (kept local, not published) ---
+README.md
+
 # --- Local scratch / drafts (never publish) ---
 scratch/
 drafts/

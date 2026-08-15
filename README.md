@@ -49,9 +49,6 @@ policy and ignores `collectsPersonalData` and `services`.
 Use `extraSections` for anything unique to one app — camera or location use,
 notifications, in-app purchases, and so on.
 
-> The two `sample-*` entries are placeholders — replace them with your real
-> apps before publishing.
-
 ## Previewing locally
 
 ```sh

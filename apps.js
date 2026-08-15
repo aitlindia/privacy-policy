@@ -52,29 +52,4 @@ const APPS = [
       },
     ],
   },
-  {
-    slug: "sample-notes",
-    name: "Sample Notes",
-    platforms: ["android"],
-    effectiveDate: "2026-08-15",
-    contactEmail: DEVELOPER.contactEmail,
-    collectsPersonalData: false,
-    services: ["admob", "firebaseAnalytics", "crashlytics", "googlePlayServices"],
-    extraSections: [],
-  },
-  {
-    slug: "sample-timer",
-    name: "Sample Timer",
-    platforms: ["android", "ios"],
-    effectiveDate: "2026-08-15",
-    contactEmail: DEVELOPER.contactEmail,
-    collectsPersonalData: false,
-    services: ["admob", "googlePlayServices", "appleAppServices"],
-    extraSections: [
-      {
-        title: "Notifications",
-        html: "<p>This app can send local notifications (for example, timer alerts). These notifications are generated on your device and no notification data is sent to us or to any third party.</p>",
-      },
-    ],
-  },
 ];

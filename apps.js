@@ -33,7 +33,7 @@ const DEVELOPER = {
 const APPS = [
   {
     slug: "bubble-level",
-    name: "Level — Simple Bubble Level",
+    name: "Level - Simple Bubble Level",
     packageName: "com.aitlindia.bubblelevel",
     platforms: ["android"],
     effectiveDate: "2026-08-15",
